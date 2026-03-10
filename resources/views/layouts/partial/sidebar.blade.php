@@ -49,6 +49,25 @@
                 Input Produk Hukum
             </a>
 
+            <div class="sidenav-menu-heading">BERITA & INFORMASI</div>
+
+            <a class="nav-link {{ request()->routeIs('category.*') ? 'active' : '' }}"
+                href="{{ route('category.index') }}">
+                <div class="nav-link-icon"><i data-feather="grid"></i></div>
+                Kategori Blog
+            </a>
+
+            <a class="nav-link {{ request()->routeIs('posts.index') || request()->routeIs('posts.edit') ? 'active' : '' }}"
+                href="{{ route('posts.index') }}">
+                <div class="nav-link-icon"><i data-feather="edit-3"></i></div>
+                Daftar Postingan
+            </a>
+
+            <a class="nav-link {{ request()->routeIs('posts.create') ? 'active' : '' }}"
+                href="{{ route('posts.create') }}">
+                <div class="nav-link-icon"><i data-feather="plus-circle"></i></div>
+                Input Post Baru
+            </a>
         @endif
 
         @if (auth()->user()->role === 'kabag_hukum')

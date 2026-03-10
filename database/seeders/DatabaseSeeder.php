@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'kabag_hukum',
             'nama_lengkap' => 'Kepala Bagian Hukum MBD',
             'email' => 'kabag@jdih.malukubaratdayakab.go.id',
-            'no_hp' => '081234567891',
+            'no_hp' => '081234567891',  
             'password' => Hash::make('password123'),
             'role' => 'kabag_hukum',
             'is_aktif' => true,

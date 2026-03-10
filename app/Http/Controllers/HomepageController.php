@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DokumenHukum;
+use App\Models\Post;
 use App\Models\ProfilHalaman;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,18 @@ class HomepageController extends Controller
 
     public function index()
     {
-        // Mengambil postingan terbaru untuk section 'Latest Posts'
-        // $posts = Post::latest()->take(6)->get();
-        return view('guest.welcome');
+        // 1. Mengambil postingan dengan status published
+        // 2. Eager Load 'category' dan 'author' (user) untuk efisiensi database (menghindari N+1 query)
+        // 3. Urutkan dari yang terbaru (latest)
+        // 4. Ambil 6-7 postingan saja untuk layout Latest Posts
+        $posts = Post::with(['category', 'author'])
+            ->where('status', 'published')
+            ->latest()
+            ->take(7)
+            ->get();
+
+        // Kirim variabel $posts ke view
+        return view('guest.welcome', compact('posts'));
     }
 
     public function searchPeraturan(Request $request)

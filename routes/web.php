@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DokumenHukumController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilHalamanController;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +60,8 @@ Route::middleware(['auth', 'peran:operator'])->prefix('operator')->group(functio
     })->name('operator.dashboard');
 
     Route::resource('produk-hukum', DokumenHukumController::class);
+    Route::resource('category', CategoryController::class);
+    Route::resource('posts', PostController::class);
 
 });
 
