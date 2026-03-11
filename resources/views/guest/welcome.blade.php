@@ -75,6 +75,7 @@
 
         </section><!-- /Blog Hero Section -->
 
+
         {{-- Search Produk Hukum --}}
         <section id="search-regulation" class="search-regulation section py-0">
             <div class="container" data-aos="fade-up">
@@ -89,34 +90,48 @@
 
                     <form action="{{ route('guest.peraturan.search') }}" method="GET">
                         <div class="row g-3">
+                            {{-- Input Kata Kunci/Judul --}}
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
                                     <input type="text" name="judul" class="form-control bg-light border-0 py-3"
-                                        placeholder="Masukkan judul atau kata kunci...">
+                                        placeholder="Masukkan judul atau kata kunci..." value="{{ request('judul') }}">
                                 </div>
                             </div>
 
+                            {{-- Select Jenis (Dinamis dari Database) --}}
                             <div class="col-md-3">
                                 <select name="jenis" class="form-select bg-light border-0 py-3">
                                     <option value="">Semua Jenis</option>
-                                    <option value="perda">Peraturan Daerah</option>
-                                    <option value="perbup">Peraturan Bupati</option>
-                                    <option value="sk">Surat Keputusan</option>
+
+                                    @foreach ($listJenis as $kelompok => $items)
+                                        <optgroup label="{{ $kelompok }}">
+                                            @foreach ($items as $item)
+                                                <option value="{{ $item->nama }}"
+                                                    {{ request('jenis') == $item->nama ? 'selected' : '' }}>
+                                                    {{ $item->nama }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
                                 </select>
                             </div>
 
+                            {{-- Select Tahun --}}
                             <div class="col-md-2">
                                 <select name="tahun" class="form-select bg-light border-0 py-3">
                                     <option value="">Semua Tahun</option>
-                                    @for ($i = date('Y'); $i >= 2010; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @php $currentYear = date('Y'); @endphp
+                                    @for ($i = $currentYear; $i >= 2010; $i--)
+                                        <option value="{{ $i }}" {{ request('tahun') == $i ? 'selected' : '' }}>
+                                            {{ $i }}</option>
                                     @endfor
                                 </select>
                             </div>
 
+                            {{-- Tombol Submit --}}
                             <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold">
+                                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm">
                                     CARI DATA
                                 </button>
                             </div>
@@ -127,13 +142,142 @@
         </section>
 
 
+      
+        {{-- SECTION STATISTIK & PERATURAN TERBARU --}}
+        <section id="stats-latest" class="stats-latest section light-background">
+            <div class="container" data-aos="fade-up">
+                <div class="row gy-4">
+
+                    {{-- SISI KIRI: STATISTIK (Counter Box) --}}
+                    <div class="col-lg-7">
+                        <div class="section-title text-start mb-4">
+                            <h2 class="fw-bold">Statistik Produk Hukum</h2>
+                            <p>Jumlah dokumen hukum yang terintegrasi dalam sistem JDIH Kabupaten Maluku Barat Daya</p>
+                        </div>
+
+                        <div class="row gy-4">
+                            {{-- Card Statistik 1 --}}
+                            <div class="col-md-6">
+                                <div
+                                    class="stats-item d-flex align-items-center w-100 h-100 p-4 shadow-sm bg-white rounded-4 border-0">
+                                    <i class="bi bi-file-earmark-text text-primary flex-shrink-0"
+                                        style="font-size: 40px;"></i>
+                                    <div class="ms-3">
+                                        <span
+                                            class="d-block fs-2 fw-bold text-dark">{{ number_format($totalPerda ?? 0) }}</span>
+                                        <p class="mb-0 text-muted fw-medium">Peraturan Daerah</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Card Statistik 2 --}}
+                            <div class="col-md-6">
+                                <div
+                                    class="stats-item d-flex align-items-center w-100 h-100 p-4 shadow-sm bg-white rounded-4 border-0">
+                                    <i class="bi bi-file-earmark-check text-success flex-shrink-0"
+                                        style="font-size: 40px;"></i>
+                                    <div class="ms-3">
+                                        <span
+                                            class="d-block fs-2 fw-bold text-dark">{{ number_format($totalPerbup ?? 0) }}</span>
+                                        <p class="mb-0 text-muted fw-medium">Peraturan Bupati</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Card Statistik 3 --}}
+                            <div class="col-md-6">
+                                <div
+                                    class="stats-item d-flex align-items-center w-100 h-100 p-4 shadow-sm bg-white rounded-4 border-0">
+                                    <i class="bi bi-journal-text text-info flex-shrink-0" style="font-size: 40px;"></i>
+                                    <div class="ms-3">
+                                        <span
+                                            class="d-block fs-2 fw-bold text-dark">{{ number_format($totalSkBupati ?? 0) }}</span>
+                                        <p class="mb-0 text-muted fw-medium">Keputusan Bupati</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Card Statistik 4 --}}
+                            <div class="col-md-6">
+                                <div
+                                    class="stats-item d-flex align-items-center w-100 h-100 p-4 shadow-sm bg-white rounded-4 border-0">
+                                    <i class="bi bi-people text-warning flex-shrink-0" style="font-size: 40px;"></i>
+                                    <div class="ms-3">
+                                        <span
+                                            class="d-block fs-2 fw-bold text-dark">{{ number_format($totalPengunjung ?? 0) }}</span>
+                                        <p class="mb-0 text-muted fw-medium">Total Kunjungan</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- SISI KANAN: PERATURAN TERBARU --}}
+                    <div class="col-lg-5">
+                        <div class="section-title text-start mb-4">
+                            <h2 class="fw-bold">Peraturan Terbaru</h2>
+                            <p>Daftar regulasi terbaru yang telah diundangkan</p>
+                        </div>
+
+                        <div class="latest-regulations-list shadow-sm bg-white rounded-4 p-3 border-0">
+                            @if (isset($latestRegulations) && $latestRegulations->count() > 0)
+                                @foreach ($latestRegulations as $reg)
+                                    <div
+                                        class="reg-item d-flex align-items-start border-bottom py-3 px-2 transition-all hover-bg-light">
+                                        <div class="reg-icon bg-light rounded-3 p-2 text-danger me-3 shadow-sm">
+                                            <i class="bi bi-file-earmark-pdf-fill fs-4"></i>
+                                        </div>
+                                        <div class="reg-info">
+                                            <h6 class="mb-1">
+                                                {{-- Gunakan route detail dokumen hukum Anda di sini --}}
+                                                <a href="{{ route('guest.peraturan.show', $reg->id) }}"
+                                                    class="text-dark fw-bold text-decoration-none"
+                                                    style="font-size: 0.95rem;">
+                                                    {{ Str::limit($reg->judul, 70) }}
+                                                </a>
+                                            </h6>
+                                            <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
+                                                <span
+                                                    class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2"
+                                                    style="font-size: 0.75rem;">
+                                                    No. {{ $reg->nomor }} Thn {{ $reg->tahun }}
+                                                </span>
+                                                <span class="text-muted small">
+                                                    <i class="bi bi-calendar3 me-1"></i>
+                                                    {{ $reg->created_at->format('d M Y') }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                <div class="text-center mt-3 p-2">
+                                    <a href="{{ route('guest.peraturan.search') }}"
+                                        class="btn btn-primary w-100 rounded-pill fw-bold shadow-sm">
+                                        Lihat Semua Produk Hukum <i class="bi bi-arrow-right ms-2"></i>
+                                    </a>
+                                </div>
+                            @else
+                                <div class="text-center py-5">
+                                    <i class="bi bi-folder-x fs-1 text-muted"></i>
+                                    <p class="text-muted mt-2">Belum ada peraturan terbaru yang tersedia.</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
         <!-- Latest Posts Section -->
         <section id="latest-posts" class="latest-posts section">
 
             <div class="container section-title" data-aos="fade-up">
                 <span class="description-title">Berita Terbaru</span>
                 <h2>Berita Terbaru</h2>
-                <p>Informasi terkini seputar kegiatan dan perkembangan terbaru jaringan dokumentasi dan informasi hukum Kabupaten Maluku Barat Daya.</p>
+                <p>Informasi terkini seputar kegiatan dan perkembangan terbaru jaringan dokumentasi dan informasi hukum
+                    Kabupaten Maluku Barat Daya.</p>
             </div>
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -160,17 +304,18 @@
 
                                     <h3 class="title">{{ $featured->title }}</h3>
                                     <p class="excerpt d-none d-md-block">
-                                        {!! Str::limit(strip_tags($featured->content), 150) !!}
+                                        {{ Str::limit(strip_tags($featured->content), 150) }}
                                     </p>
 
                                     <div class="meta d-flex align-items-center gap-3">
                                         <div class="d-flex align-items-center">
-                                            <i class="bi bi-person"></i><span
-                                                class="ps-2">{{ $featured->author->name ?? 'Admin' }}</span>
+                                            <i class="bi bi-person"></i>
+                                            <span class="ps-2">{{ $featured->author->name ?? 'Admin JDIH' }}</span>
                                         </div>
                                     </div>
 
-                                    <a href="{{ route('posts.show', $featured->slug) }}" class="readmore stretched-link">
+                                    <a href="{{ route('berita.detail', $featured->slug) }}"
+                                        class="readmore stretched-link">
                                         <span>Lanjutkan</span><i class="bi bi-arrow-right"></i>
                                     </a>
                                 </div>
@@ -195,7 +340,7 @@
                                                     <span class="category">{{ $post->category->name }}</span>
                                                 </div>
                                                 <h4 class="title">{{ Str::limit($post->title, 50) }}</h4>
-                                                <a href="{{ route('posts.show', $post->slug) }}"
+                                                <a href="{{ route('berita.detail', $post->slug) }}"
                                                     class="readmore"><span>Baca Artikel</span><i
                                                         class="bi bi-arrow-right"></i></a>
                                             </div>
@@ -218,20 +363,21 @@
                                         <div class="meta d-flex align-items-center flex-wrap gap-2">
                                             <span class="cat-badge">{{ $post->category->name }}</span>
                                             <div class="d-flex align-items-center ms-auto">
-                                                <i class="bi bi-person"></i><span
-                                                    class="ps-2">{{ $post->author->name ?? 'Admin' }}</span>
+                                                <i class="bi bi-person"></i>
+                                                <span class="ps-2">{{ $post->author->name ?? 'Admin' }}</span>
                                             </div>
                                         </div>
                                         <h3 class="title">{{ Str::limit($post->title, 60) }}</h3>
-                                        <a href="{{ route('posts.show', $post->slug) }}" class="readmore"><span>Baca
-                                                Selengkapnya</span><i class="bi bi-arrow-right"></i></a>
+                                        <a href="{{ route('berita.detail', $post->slug) }}" class="readmore">
+                                            <span>Baca Selengkapnya</span><i class="bi bi-arrow-right"></i>
+                                        </a>
                                     </div>
                                 </article>
                             </div>
                         @endforeach
                     @else
-                        <div class="col-12 text-center">
-                            <p class="text-muted">Belum ada berita yang diterbitkan.</p>
+                        <div class="col-12 text-center py-5">
+                            <p class="text-muted italic">Belum ada berita yang diterbitkan saat ini.</p>
                         </div>
                     @endif
 

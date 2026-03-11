@@ -65,16 +65,30 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="small mb-1">Jenis Produk Hukum</label>
-                                        <select class="form-select" name="jenis" id="jenis_select"
-                                            onchange="setSingkatan()">
-                                            @foreach (['Peraturan Daerah' => 'PERDA', 'Peraturan Bupati' => 'PERBUP', 'Keputusan Bupati' => 'KEP'] as $val => $singkat)
-                                                <option value="{{ $val }}" data-singkat="{{ $singkat }}"
-                                                    {{ $dokumen->jenis == $val ? 'selected' : '' }}>{{ $val }}
-                                                </option>
+                                        <select class="form-select @error('jenis') is-invalid @enderror" name="jenis"
+                                            id="jenis_select" onchange="setSingkatan()" required>
+                                            <option value="" disabled>Pilih Jenis...</option>
+
+                                            @foreach ($listJenis as $kelompok => $items)
+                                                <optgroup label="{{ $kelompok }}">
+                                                    @foreach ($items as $item)
+                                                        <option value="{{ $item->nama }}"
+                                                            data-singkat="{{ $item->singkatan }}"
+                                                            {{ old('jenis', $dokumen->jenis) == $item->nama ? 'selected' : '' }}>
+                                                            {{ $item->nama }} ({{ $item->singkatan }})
+                                                        </option>
+                                                    @endforeach
+                                                </optgroup>
                                             @endforeach
                                         </select>
+
+                                        {{-- Input hidden untuk singkatan_jenis --}}
                                         <input type="hidden" name="singkatan_jenis" id="singkatan_jenis_hidden"
-                                            value="{{ $dokumen->singkatan_jenis }}">
+                                            value="{{ old('singkatan_jenis', $dokumen->singkatan_jenis) }}">
+
+                                        @error('jenis')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row gx-3 mb-3">

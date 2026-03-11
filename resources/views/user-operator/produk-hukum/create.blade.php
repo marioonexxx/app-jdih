@@ -54,18 +54,37 @@
                                         <select class="form-select @error('jenis') is-invalid @enderror" name="jenis"
                                             id="jenis_select" required onchange="setSingkatan()">
                                             <option value="" selected disabled>Pilih Jenis...</option>
-                                            <option value="Peraturan Daerah" data-singkat="PERDA"
-                                                {{ old('jenis') == 'Peraturan Daerah' ? 'selected' : '' }}>Peraturan Daerah
-                                                (PERDA)</option>
-                                            <option value="Peraturan Bupati" data-singkat="PERBUP"
-                                                {{ old('jenis') == 'Peraturan Bupati' ? 'selected' : '' }}>Peraturan Bupati
-                                                (PERBUP)</option>
-                                            <option value="Keputusan Bupati" data-singkat="KEP"
-                                                {{ old('jenis') == 'Keputusan Bupati' ? 'selected' : '' }}>Keputusan Bupati
-                                                (KEP)</option>
+
+                                            @foreach ($listJenis as $kelompok => $items)
+                                                <optgroup label="{{ $kelompok }}">
+                                                    @foreach ($items as $item)
+                                                        <option value="{{ $item->nama }}"
+                                                            data-singkat="{{ $item->singkatan }}"
+                                                            {{ old('jenis', $dokumen->jenis ?? '') == $item->nama ? 'selected' : '' }}>
+                                                            {{ $item->nama }} ({{ $item->singkatan }})
+                                                        </option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endforeach
                                         </select>
+
+                                        {{-- Input hidden untuk menyimpan singkatan_jenis ke database --}}
                                         <input type="hidden" name="singkatan_jenis" id="singkatan_jenis_hidden"
-                                            value="{{ old('singkatan_jenis') }}">
+                                            value="{{ old('singkatan_jenis', $dokumen->singkatan_jenis ?? '') }}">
+
+                                        <script>
+                                            function setSingkatan() {
+                                                const select = document.getElementById('jenis_select');
+                                                const hiddenInput = document.getElementById('singkatan_jenis_hidden');
+
+                                                // Ambil data-singkat dari option yang dipilih
+                                                const selectedOption = select.options[select.selectedIndex];
+                                                const singkatan = selectedOption.getAttribute('data-singkat');
+
+                                                // Set nilai ke input hidden
+                                                hiddenInput.value = singkatan;
+                                            }
+                                        </script>
                                         @error('jenis')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -140,6 +159,7 @@
                             </div>
                         </div>
 
+
                         {{-- KARTU 3: DATA TAMBAHAN --}}
                         <div class="card mb-4">
                             <div class="card-header text-primary fw-bold">Data Teknis & Klasifikasi</div>
@@ -158,15 +178,79 @@
                                 </div>
                                 <div class="row gx-3 mb-3">
                                     <div class="col-md-6">
-                                        <label class="small mb-1">Bidang Hukum</label>
-                                        <input class="form-control" name="bidang_hukum" type="text"
-                                            placeholder="Contoh: Hukum Administrasi Negara"
-                                            value="{{ old('bidang_hukum') }}">
+                                        <label class="small mb-1">Bidang Hukum <span class="text-danger">*</span></label>
+                                        <select class="form-select @error('bidang_hukum') is-invalid @enderror"
+                                            name="bidang_hukum" required>
+                                            <option value="" selected disabled>Pilih Bidang...</option>
+                                            <option value="Hukum Administrasi Negara"
+                                                {{ old('bidang_hukum') == 'Hukum Administrasi Negara' ? 'selected' : '' }}>
+                                                Hukum Administrasi Negara</option>
+                                            <option value="Hukum Tata Negara"
+                                                {{ old('bidang_hukum') == 'Hukum Tata Negara' ? 'selected' : '' }}>Hukum
+                                                Tata Negara</option>
+                                            <option value="Hukum Pidana"
+                                                {{ old('bidang_hukum') == 'Hukum Pidana' ? 'selected' : '' }}>Hukum Pidana
+                                            </option>
+                                            <option value="Hukum Perdata"
+                                                {{ old('bidang_hukum') == 'Hukum Perdata' ? 'selected' : '' }}>Hukum
+                                                Perdata</option>
+                                            <option value="Hukum Lingkungan"
+                                                {{ old('bidang_hukum') == 'Hukum Lingkungan' ? 'selected' : '' }}>Hukum
+                                                Lingkungan</option>
+                                        </select>
+                                        @error('bidang_hukum')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="small mb-1">Urusan Pemerintah</label>
-                                        <input class="form-control" name="urusan_pemerintah" type="text"
-                                            value="{{ old('urusan_pemerintah', '-') }}">
+                                        <label class="small mb-1">Urusan Pemerintah <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-select @error('urusan_pemerintah') is-invalid @enderror"
+                                            name="urusan_pemerintah" required>
+                                            <option value="" selected disabled>Pilih Urusan...</option>
+                                            <optgroup label="Pelayanan Dasar">
+                                                <option value="Pendidikan"
+                                                    {{ old('urusan_pemerintah') == 'Pendidikan' ? 'selected' : '' }}>
+                                                    Pendidikan</option>
+                                                <option value="Kesehatan"
+                                                    {{ old('urusan_pemerintah') == 'Kesehatan' ? 'selected' : '' }}>
+                                                    Kesehatan</option>
+                                                <option value="Pekerjaan Umum"
+                                                    {{ old('urusan_pemerintah') == 'Pekerjaan Umum' ? 'selected' : '' }}>
+                                                    Pekerjaan Umum</option>
+                                                <option value="Trantibum & Linmas"
+                                                    {{ old('urusan_pemerintah') == 'Trantibum & Linmas' ? 'selected' : '' }}>
+                                                    Trantibum & Linmas</option>
+                                            </optgroup>
+                                            <optgroup label="Non-Pelayanan Dasar">
+                                                <option value="Lingkungan Hidup"
+                                                    {{ old('urusan_pemerintah') == 'Lingkungan Hidup' ? 'selected' : '' }}>
+                                                    Lingkungan Hidup</option>
+                                                <option value="Perhubungan"
+                                                    {{ old('urusan_pemerintah') == 'Perhubungan' ? 'selected' : '' }}>
+                                                    Perhubungan</option>
+                                                <option value="Tenaga Kerja"
+                                                    {{ old('urusan_pemerintah') == 'Tenaga Kerja' ? 'selected' : '' }}>
+                                                    Tenaga Kerja</option>
+                                            </optgroup>
+                                            <optgroup label="Urusan Pilihan">
+                                                <option value="Kelautan & Perikanan"
+                                                    {{ old('urusan_pemerintah') == 'Kelautan & Perikanan' ? 'selected' : '' }}>
+                                                    Kelautan & Perikanan</option>
+                                                <option value="Pariwisata"
+                                                    {{ old('urusan_pemerintah') == 'Pariwisata' ? 'selected' : '' }}>
+                                                    Pariwisata</option>
+                                                <option value="Pertanian"
+                                                    {{ old('urusan_pemerintah') == 'Pertanian' ? 'selected' : '' }}>
+                                                    Pertanian</option>
+                                            </optgroup>
+                                            <option value="Lainnya"
+                                                {{ old('urusan_pemerintah') == 'Lainnya' ? 'selected' : '' }}>Lainnya
+                                            </option>
+                                        </select>
+                                        @error('urusan_pemerintah')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="mb-0">

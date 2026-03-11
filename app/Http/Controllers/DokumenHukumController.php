@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DokumenHukum;
+use App\Models\JenisProdukHukum;
 use App\Models\RiwayatPeraturan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,13 +17,6 @@ class DokumenHukumController extends Controller
     {
         $dokumen = DokumenHukum::latest()->paginate(10);
         return view('user-operator.produk-hukum.index', compact('dokumen'));
-    }
-
-    public function create()
-    {
-        // Mengambil dokumen yang ada untuk pilihan riwayat (mencabut/mengubah)
-        $semuaDokumen = DokumenHukum::select('id', 'judul', 'nomor', 'tahun', 'singkatan_jenis')->get();
-        return view('user-operator.produk-hukum.create', compact('semuaDokumen'));
     }
 
     public function store(Request $request)
@@ -65,22 +59,37 @@ class DokumenHukumController extends Controller
         }
     }
 
+    public function create()
+    {
+        $semuaDokumen = DokumenHukum::select('id', 'judul', 'nomor', 'tahun', 'singkatan_jenis')->get();
+
+        // Ambil jenis produk hukum, urutkan, dan kelompokkan berdasarkan kolom 'kelompok'
+        $listJenis = JenisProdukHukum::orderBy('kelompok')
+            ->orderBy('urutan')
+            ->get()
+            ->groupBy('kelompok');
+
+        return view('user-operator.produk-hukum.create', compact('semuaDokumen', 'listJenis'));
+    }
+
     public function edit($id)
     {
         $dokumen = DokumenHukum::findOrFail($id);
-
-        // Peraturan lain untuk pilihan dropdown target
         $semuaDokumen = DokumenHukum::where('id', '!=', $id)->orderBy('tahun', 'desc')->get();
 
-        // Dokumen ini sebagai SUBJEK (dia yang mengubah/mencabut)
-        $riwayatAktif = $dokumen->riwayatKeBawah()->first();
+        // Tambahkan juga di edit agar dropdown jenis tetap dinamis saat update
+        $listJenis = JenisProdukHukum::orderBy('kelompok')
+            ->orderBy('urutan')
+            ->get()
+            ->groupBy('kelompok');
 
-        // Dokumen ini sebagai OBJEK (dia yang DIubah/DIcabut oleh aturan lain)
+        $riwayatAktif = $dokumen->riwayatKeBawah()->first();
         $terkenaDampak = $dokumen->riwayatKeAtas()->with('dokumen')->get();
 
         return view('user-operator.produk-hukum.edit', compact(
             'dokumen',
             'semuaDokumen',
+            'listJenis', // Kirim ke view
             'riwayatAktif',
             'terkenaDampak'
         ));

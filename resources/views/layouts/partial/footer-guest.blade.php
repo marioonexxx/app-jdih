@@ -17,14 +17,10 @@
                     </p>
 
                     <div class="social-links mt-4">
-                        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i
-                                class="bi bi-facebook"></i></a>
-                        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i
-                                class="bi bi-instagram"></i></a>
-                        <a href="https://youtube.com" target="_blank" aria-label="YouTube"><i
-                                class="bi bi-youtube"></i></a>
-                        <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i
-                                class="bi bi-twitter-x"></i></a>
+                        <a href="#" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" target="_blank" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" target="_blank" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="#" target="_blank" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
                     </div>
                 </div>
             </div>
@@ -33,40 +29,41 @@
                 <div class="footer-links-grid">
                     <div class="row">
                         <div class="col-6 col-md-4">
-                            <h5>Company</h5>
+                            <h5>Profil</h5>
                             <ul class="list-unstyled">
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Our Team</a></li>
-                                <li><a href="#">Careers</a></li>
-                                <li><a href="#">Newsroom</a></li>
+                                <li><a href="{{ url('/profil/visi-misi') }}">Visi & Misi</a></li>
+                                <li><a href="{{ url('/profil/struktur-organisasi') }}">Struktur Organisasi</a></li>
+                                <li><a href="{{ url('/profil/tugas-fungsi') }}">Tugas & Fungsi</a></li>
+                                <li><a href="{{ url('/profil/dasar-hukum') }}">Dasar Hukum</a></li>
                             </ul>
                         </div>
                         <div class="col-6 col-md-4">
-                            <h5>Services</h5>
+                            <h5>Produk Hukum</h5>
                             <ul class="list-unstyled">
-                                <li><a href="#">Web Development</a></li>
-                                <li><a href="#">UI/UX Design</a></li>
-                                <li><a href="#">Digital Strategy</a></li>
-                                <li><a href="#">Branding</a></li>
+                                <li><a href="#">Peraturan Daerah</a></li>
+                                <li><a href="#">Peraturan Bupati</a></li>
+                                <li><a href="#">Keputusan Bupati</a></li>
+                                <li><a href="#">Instruksi Bupati</a></li>
                             </ul>
                         </div>
                         <div class="col-6 col-md-4">
-                            <h5>Support</h5>
+                            <h5>Lainnya</h5>
                             <ul class="list-unstyled">
-                                <li><a href="#">Help Center</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Terms of Service</a></li>
+                                <li><a href="#">Berita Terkini</a></li>
+                                <li><a href="#">Galeri</a></li>
+                                <li><a href="#">Kontak Kami</a></li>
+                                <li><a href="https://jdihn.go.id" target="_blank">JDIH Nasional</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-2">
+            <div class="col-lg-2 text-center text-lg-start">
                 <div class="footer-cta">
-                    <h5>Let's Connect</h5>
-                    <a href="contact.html" class="btn btn-outline">Get in Touch</a>
+                    <h5>Layanan</h5>
+                    <p class="small text-muted">Butuh bantuan terkait informasi hukum?</p>
+                    <a href="{{ url('/kontak') }}" class="btn btn-primary rounded-pill px-4">Hubungi Kami</a>
                 </div>
             </div>
 
@@ -76,16 +73,11 @@
     <div class="footer-bottom">
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 text-center">
                     <div class="footer-bottom-content">
-                        <p class="mb-0">© <strong>Story</strong>. All rights reserved.</p>
-                        <div class="credits">
-                            <!-- All the links in the footer should remain intact. -->
-                            <!-- You can delete the links only if you've purchased the pro version. -->
-                            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                            <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-                            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a
-                                href="https://bootstrapmade.com/tools/">DevTools</a>
+                        <p class="mb-0">© {{ date('Y') }} <strong>JDIH Kabupaten Maluku Barat Daya</strong>. All rights reserved.</p>
+                        <div class="credits mt-2">
+                            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
                         </div>
                     </div>
                 </div>

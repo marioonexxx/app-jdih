@@ -19,24 +19,18 @@
             </ul>
         </li>
 
-        <li class="dropdown"><a href="#"><span>Produk Hukum</span> <i
-                    class="bi bi-chevron-down toggle-dropdown"></i></a>
+       
+
+        <li class="dropdown">
+            <a href="#"><span>Produk Hukum</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-                <li><a href="#">Peraturan Daerah</a></li>
-                <li><a href="#">Peraturan Bupati</a></li>
-                <li><a href="#">Keputusan Bupati</a></li>
-
-
-            </ul>
-        </li>
-
-        <li class="dropdown"><a href="#"><span>Informasi</span> <i
-                    class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-                <li><a href="#">Berita JDIH</a></li>
-                <li><a href="#">Artikel Hukum</a></li>
-                <li><a href="#">Galeri Kegiatan</a></li>
-                <li><a href="#">Infografis</a></li>
+                @foreach ($listMenuJenis as $item)
+                    <li>
+                        <a href="{{ route('guest.peraturan.search', ['jenis' => $item->nama]) }}">
+                            {{ $item->nama }}
+                        </a>
+                    </li>
+                @endforeach
             </ul>
         </li>
 

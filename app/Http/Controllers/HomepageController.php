@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\DokumenHukum;
+use App\Models\JenisProdukHukum;
 use App\Models\Post;
 use App\Models\ProfilHalaman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class HomepageController extends Controller
 {
@@ -13,21 +16,48 @@ class HomepageController extends Controller
 
     public function index()
     {
-        // 1. Mengambil postingan dengan status published
-        // 2. Eager Load 'category' dan 'author' (user) untuk efisiensi database (menghindari N+1 query)
-        // 3. Urutkan dari yang terbaru (latest)
-        // 4. Ambil 6-7 postingan saja untuk layout Latest Posts
+        // 1. Ambil Berita Terbaru
         $posts = Post::with(['category', 'author'])
             ->where('status', 'published')
             ->latest()
             ->take(7)
             ->get();
 
-        // Kirim variabel $posts ke view
-        return view('guest.welcome', compact('posts'));
+        // 2. Ambil data jenis untuk dropdown pencarian
+        $listJenis = JenisProdukHukum::orderBy('kelompok')
+            ->orderBy('urutan')
+            ->get()
+            ->groupBy('kelompok');
+
+        // 3. Ambil 5 Peraturan Terbaru tanpa with()
+        $latestRegulations = DokumenHukum::latest()
+            ->take(5)
+            ->get();
+
+        // 4. Hitung Statistik (Sesuaikan 'jenis_id' atau 'jenis' dengan kolom di tabel Anda)
+        // Jika kolomnya berisi nama teks (misal: "Peraturan Daerah")
+        $totalPerda = DokumenHukum::where('jenis', 'LIKE', '%Peraturan Daerah%')->count();
+        $totalPerbup = DokumenHukum::where('jenis', 'LIKE', '%Peraturan Bupati%')->count();
+        $totalSkBupati = DokumenHukum::where('jenis', 'LIKE', '%Keputusan Bupati%')->count();
+
+        // Jika tabel Anda menggunakan 'jenis_id', gunakan angka ID-nya:
+        // $totalPerda = DokumenHukum::where('jenis_id', 1)->count();
+
+        $totalPengunjung = 1250; // Dummy sementara
+
+        return view('guest.welcome', compact(
+            'posts',
+            'listJenis',
+            'latestRegulations',
+            'totalPerda',
+            'totalPerbup',
+            'totalSkBupati',
+            'totalPengunjung'
+        ));
     }
 
-    public function searchPeraturan(Request $request)
+
+    public function search(Request $request)
     {
         $query = DokumenHukum::query();
 
@@ -36,26 +66,27 @@ class HomepageController extends Controller
         }
 
         if ($request->filled('jenis')) {
-            $query->where('jenis_id', $request->jenis);
+            $query->where('jenis', $request->jenis);
         }
 
         if ($request->filled('tahun')) {
             $query->where('tahun', $request->tahun);
         }
 
-        $results = $query->latest()->paginate(10);
+        $results = $query->latest()->paginate(10)->withQueryString();
 
-        return view('guest.hasil-pencarian', compact('results'));
+        // Kirim listJenis juga agar dropdown filter di halaman hasil pencarian tidak kosong
+        $listJenis = JenisProdukHukum::orderBy('kelompok')->orderBy('urutan')->get()->groupBy('kelompok');
+
+        return view('guest.peraturan.index', compact('results', 'listJenis'));
     }
 
-    public function showPeraturan($id)
-    {
-        // Cari peraturan atau tampilkan 404 jika tidak ada
-        // Berasumsi nama model Anda adalah Peraturan
-        $peraturan = DokumenHukum::findOrFail($id);
 
-        return view('guest.hasil-pencarian', compact('peraturan'));
-    }
+
+
+
+
+
     public function visiMisi()
     {
         $profil = ProfilHalaman::first();
