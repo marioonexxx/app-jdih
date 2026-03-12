@@ -57,10 +57,14 @@ class DokumenHukumController extends Controller
         try {
             // 1. Upload File
             $fileName = null;
+            // Ganti bagian simpan file menjadi seperti ini:
             if ($request->hasFile('file_pdf')) {
                 $file = $request->file('file_pdf');
                 $fileName = $request->singkatan_jenis . '_' . Str::slug($request->nomor) . '_' . $request->tahun . '_' . time() . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('public/produk-hukum', $fileName);
+
+                // Simpan ke folder 'produk-hukum' di dalam disk 'public'
+                // Disk 'public' secara otomatis mengarah ke storage/app/public
+                $file->storeAs('produk-hukum', $fileName, 'public');
             }
 
             // 2. Simpan Dokumen Utama (Filter input agar tidak menyertakan data riwayat)
@@ -207,12 +211,13 @@ class DokumenHukumController extends Controller
 
         DB::beginTransaction();
         try {
-            // Hapus file fisik
-            if ($dokumen->file_pdf && Storage::exists('public/produk-hukum/' . $dokumen->file_pdf)) {
-                Storage::delete('public/produk-hukum/' . $dokumen->file_pdf);
+            // Hapus file fisik menggunakan disk 'public'
+            // Cukup tulis path di dalam disk-nya: 'produk-hukum/namafile.pdf'
+            if ($dokumen->file_pdf && Storage::disk('public')->exists('produk-hukum/' . $dokumen->file_pdf)) {
+                Storage::disk('public')->delete('produk-hukum/' . $dokumen->file_pdf);
             }
 
-            // Hapus riwayat terkait (Jika database tidak pakai cascade delete)
+            // Hapus riwayat terkait
             DB::table('riwayat_peraturan')->where('dokumen_id', $id)->delete();
             DB::table('riwayat_peraturan')->where('target_dokumen_id', $id)->delete();
 
