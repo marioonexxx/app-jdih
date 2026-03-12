@@ -15,25 +15,19 @@
                 <div class="nav-link-icon"><i data-feather="target"></i></div>
                 Profil
             </a>
+            <a class="nav-link" href="{{ route('slider.index') }}">
+                <div class="nav-link-icon"><i data-feather="image"></i></div>
+                Image Slider
+            </a>
             <div class="sidenav-menu-heading">Administrator</div>
 
-            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                data-bs-target="#collapseUserMgmt" aria-expanded="false" aria-controls="collapseUserMgmt">
+            <a class="nav-link" href="{{ route('manajemen-operator.index') }}">
                 <div class="nav-link-icon"><i data-feather="users"></i></div>
                 Manajemen User
-                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
             </a>
-            <div class="collapse" id="collapseUserMgmt" data-bs-parent="#accordionSidenav">
-                <nav class="sidenav-menu-nested nav">
-                    <a class="nav-link" href="#">Daftar Pegawai</a>
-                    <a class="nav-link" href="#">Tambah User</a>
-                </nav>
-            </div>
+            
 
-            <a class="nav-link" href="#">
-                <div class="nav-link-icon"><i data-feather="settings"></i></div>
-                Pengaturan Sistem
-            </a>
+            
         @endif
 
         @if (auth()->user()->role === 'operator')

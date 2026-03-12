@@ -19,6 +19,30 @@ class DokumenHukumController extends Controller
         return view('user-operator.produk-hukum.index', compact('dokumen'));
     }
 
+    public function show($id)
+    {
+        // Menggunakan findOrFail agar otomatis muncul 404 jika ID tidak ada
+        $produk_hukum = DokumenHukum::findOrFail($id);
+
+        return view('user-operator.produk-hukum.show', compact('produk_hukum'));
+    }
+    public function preview($id)
+    {
+        $dokumen = DokumenHukum::findOrFail($id);
+
+        // Path disesuaikan dengan folder simpan di method store: 'produk-hukum/'
+        $path = storage_path('app/public/produk-hukum/' . $dokumen->file_pdf);
+
+        if (!file_exists($path)) {
+            abort(404, "File fisik tidak ditemukan di: " . $path);
+        }
+
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline'
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([

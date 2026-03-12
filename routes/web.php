@@ -4,10 +4,12 @@ use App\Http\Controllers\BlogHomeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DokumenHukumController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\ManajemenUserController;
 use App\Http\Controllers\PencarianController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilHalamanController;
+use App\Http\Controllers\SliderController;
 use App\Http\Controllers\UserOperatorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +31,7 @@ Route::get('/dasar-hukum', [HomepageController::class, 'dasarHukum'])->name('gue
 Route::get('/kontak', [HomepageController::class, 'kontak'])->name('guest.kontak');
 
 //Route BlogPost Home
-
+Route::get('/berita-dan-kegiatan', [BlogHomeController::class, 'index'])->name('berita.index');
 Route::get('/berita/{slug}', [BlogHomeController::class, 'show'])->name('berita.detail');
 
 
@@ -53,6 +55,10 @@ Route::middleware(['auth', 'peran:superadmin'])->prefix('admin')->group(function
         return view('user-admin.dashboard');
     })->name('admin.dashboard');
 
+
+    Route::resource('slider', SliderController::class);
+    Route::resource('manajemen-operator', ManajemenUserController::class);
+
     // Nama Route: admin.profil.index
     Route::get('/profil-halaman', [ProfilHalamanController::class, 'index'])
         ->name('admin.profil.index');
@@ -71,14 +77,16 @@ Route::middleware(['auth', 'peran:kabag_hukum'])->prefix('kabag')->group(functio
 
 // Route Khusus Operator
 Route::middleware(['auth', 'peran:operator'])->prefix('operator')->group(function () {
-  
+
 
 
     Route::get('/dashboard', [UserOperatorController::class, 'index'])->name('operator.dashboard');
+    Route::get('produk-hukum/preview/{id}', [DokumenHukumController::class, 'preview'])->name('operator.produk-hukum.preview');
     Route::resource('produk-hukum', DokumenHukumController::class);
+    // Route Custom untuk Preview PDF
+
     Route::resource('category', CategoryController::class);
     Route::resource('posts', PostController::class);
-
 });
 
 

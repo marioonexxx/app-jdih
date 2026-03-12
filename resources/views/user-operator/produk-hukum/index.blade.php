@@ -88,17 +88,27 @@
                                         </td>
                                         <td>
                                             <div class="d-flex">
+                                                {{-- Tombol Preview (Show) --}}
                                                 <a class="btn btn-datatable btn-icon btn-transparent-dark me-2"
-                                                    href="{{ route('produk-hukum.edit', $item->id) }}">
+                                                    href="{{ route('produk-hukum.show', $item->id) }}"
+                                                    title="Preview Dokumen">
+                                                    <i data-feather="eye"></i>
+                                                </a>
+
+                                                {{-- Tombol Edit --}}
+                                                <a class="btn btn-datatable btn-icon btn-transparent-dark me-2"
+                                                    href="{{ route('produk-hukum.edit', $item->id) }}" title="Edit Data">
                                                     <i data-feather="edit"></i>
                                                 </a>
+
+                                                {{-- Form Delete --}}
                                                 <form id="delete-form-{{ $item->id }}"
                                                     action="{{ route('produk-hukum.destroy', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button"
                                                         class="btn btn-datatable btn-icon btn-transparent-dark btn-delete"
-                                                        data-id="{{ $item->id }}">
+                                                        data-id="{{ $item->id }}" title="Hapus Data">
                                                         <i data-feather="trash-2"></i>
                                                     </button>
                                                 </form>

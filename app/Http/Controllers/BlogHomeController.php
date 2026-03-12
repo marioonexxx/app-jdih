@@ -7,6 +7,17 @@ use Illuminate\Http\Request;
 
 class BlogHomeController extends Controller
 {
+
+    public function index()
+    {
+        // Ambil semua post yang published, urutkan dari yang terbaru
+        $posts = Post::with(['category', 'author'])
+            ->where('status', 'published')
+            ->latest('published_at')
+            ->paginate(9); // Tampilkan 9 berita per halaman
+
+        return view('guest.post-list', compact('posts'));
+    }
     public function show($slug)
     {
         // Cari postingan yang statusnya published berdasarkan slug

@@ -3,26 +3,26 @@
         <li><a href="{{ url('/') }}" class="{{ Request::is('/') ? 'active' : '' }}">Beranda</a></li>
 
         <li class="dropdown">
-            <a href="#">
+            <a href="#" class="{{ Request::is('profil*') ? 'active' : '' }}">
                 <span>Profil</span> <i class="bi bi-chevron-down toggle-dropdown"></i>
             </a>
             <ul>
-                <li>
-                    <a href="{{ route('guest.visi-misi') }}">Visi & Misi</a>
-                </li>
-                <li>
-                    <a href="{{ route('guest.struktur') }}">Struktur Organisasi</a>
-                </li>
-                <li>
-                    <a href="{{ route('guest.hukum') }}">Dasar Hukum</a>
-                </li>
+                <li><a href="{{ route('guest.visi-misi') }}">Visi & Misi</a></li>
+                <li><a href="{{ route('guest.struktur') }}">Struktur Organisasi</a></li>
+                <li><a href="{{ route('guest.hukum') }}">Dasar Hukum</a></li>
             </ul>
         </li>
 
-       
+        <li>
+            <a href="{{ route('berita.index') }}" class="{{ request()->routeIs('berita.*') ? 'active' : '' }}">
+                Berita & Kegiatan
+            </a>
+        </li>
 
         <li class="dropdown">
-            <a href="#"><span>Produk Hukum</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <a href="#" class="{{ Request::is('produk-hukum*') ? 'active' : '' }}">
+                <span>Produk Hukum</span> <i class="bi bi-chevron-down toggle-dropdown"></i>
+            </a>
             <ul>
                 @foreach ($listMenuJenis as $item)
                     <li>

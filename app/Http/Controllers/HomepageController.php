@@ -6,6 +6,7 @@ use App\Models\DokumenHukum;
 use App\Models\JenisProdukHukum;
 use App\Models\Post;
 use App\Models\ProfilHalaman;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -45,6 +46,11 @@ class HomepageController extends Controller
 
         $totalPengunjung = 1250; // Dummy sementara
 
+
+        $sliders = Slider::where('is_active', true)
+                         ->orderBy('order', 'asc')
+                         ->get();
+
         return view('guest.welcome', compact(
             'posts',
             'listJenis',
@@ -52,7 +58,9 @@ class HomepageController extends Controller
             'totalPerda',
             'totalPerbup',
             'totalSkBupati',
-            'totalPengunjung'
+            'totalPengunjung',
+            'sliders',
+            
         ));
     }
 

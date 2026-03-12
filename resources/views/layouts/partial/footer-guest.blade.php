@@ -8,7 +8,7 @@
                     <a href="{{ url('/') }}" class="logo d-flex align-items-center mb-3 text-decoration-none">
                         <img src="{{ asset('img/logo-awal-jdihn-small.png') }}" alt="Logo JDIH" class="me-2"
                             style="height: 40px;">
-                        <span class="sitename fw-bold text-white">JDIH Kab. MBD</span>
+                        <span class="sitename fw-bold text-dark">JDIH Kabupaten <br> Maluku Barat Daya</span>
                     </a>
 
                     <p class="tagline">
@@ -31,27 +31,26 @@
                         <div class="col-6 col-md-4">
                             <h5>Profil</h5>
                             <ul class="list-unstyled">
-                                <li><a href="{{ url('/profil/visi-misi') }}">Visi & Misi</a></li>
-                                <li><a href="{{ url('/profil/struktur-organisasi') }}">Struktur Organisasi</a></li>
-                                <li><a href="{{ url('/profil/tugas-fungsi') }}">Tugas & Fungsi</a></li>
-                                <li><a href="{{ url('/profil/dasar-hukum') }}">Dasar Hukum</a></li>
+                                <li><a href="{{ url('/visi-misi') }}">Visi & Misi</a></li>
+                                <li><a href="{{ url('/struktur-organisasi') }}">Struktur Organisasi</a></li>                                
+                                <li><a href="{{ url('/dasar-hukum') }}">Dasar Hukum</a></li>
                             </ul>
                         </div>
                         <div class="col-6 col-md-4">
                             <h5>Produk Hukum</h5>
                             <ul class="list-unstyled">
-                                <li><a href="#">Peraturan Daerah</a></li>
-                                <li><a href="#">Peraturan Bupati</a></li>
-                                <li><a href="#">Keputusan Bupati</a></li>
-                                <li><a href="#">Instruksi Bupati</a></li>
+                                <li><a href="{{ url('/cari-peraturan') }}">Peraturan Daerah</a></li>
+                                <li><a href="{{ url('/cari-peraturan') }}">Peraturan Bupati</a></li>
+                                <li><a href="{{ url('/cari-peraturan') }}">Keputusan Bupati</a></li>
+                                <li><a href="{{ url('/cari-peraturan') }}">Instruksi Bupati</a></li>
                             </ul>
                         </div>
                         <div class="col-6 col-md-4">
                             <h5>Lainnya</h5>
                             <ul class="list-unstyled">
-                                <li><a href="#">Berita Terkini</a></li>
-                                <li><a href="#">Galeri</a></li>
-                                <li><a href="#">Kontak Kami</a></li>
+                                <li><a href="{{ url('/berita-dan-kegiatan') }}">Berita Terkini</a></li>
+                                
+                                <li><a href="{{ url('/kontak') }}">Kontak Kami</a></li>
                                 <li><a href="https://jdihn.go.id" target="_blank">JDIH Nasional</a></li>
                             </ul>
                         </div>
@@ -76,9 +75,7 @@
                 <div class="col-12 text-center">
                     <div class="footer-bottom-content">
                         <p class="mb-0">© {{ date('Y') }} <strong>JDIH Kabupaten Maluku Barat Daya</strong>. All rights reserved.</p>
-                        <div class="credits mt-2">
-                            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
